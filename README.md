@@ -22,5 +22,5 @@ An End-to-End Explainable AI (XAI) dashboard designed to detect academic drop-ou
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/Gourav712112/Failsafe-Student-Risk-Detector.git](https://github.com/Gourav712112/Failsafe-Student-Risk-Detector.git)
-cd Failsafe-Student-Risk-Detector
+git clone https://github.com/Gourav712112/Failsafe-Student-Risk-Detector.git
+   cd Failsafe-Student-Risk-Detector
