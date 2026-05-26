@@ -40,10 +40,10 @@ def home():
 @app.post("/predict")
 def predict_student_risk(student: StudentData):
     try:
-        # 1. 
+        
         full_features = baseline_row.copy()
         
-        # 2. 
+         
         full_features['sex'] = student.sex
         full_features['studytime'] = student.studytime
         full_features['failures'] = student.failures
@@ -53,7 +53,7 @@ def predict_student_risk(student: StudentData):
 
         input_data = pd.DataFrame([full_features])
 
-        # 3.
+        
         for col, le in encoders.items():
             if col in input_data.columns:
                \
@@ -63,7 +63,7 @@ def predict_student_risk(student: StudentData):
         feature_order = model.get_booster().feature_names
         input_data = input_data[feature_order]
 
-        # 4. ML Prediction
+        
         risk_prob = float(model.predict_proba(input_data)[0][1])
         risk_percentage = round(risk_prob * 100, 2)
         
@@ -77,7 +77,7 @@ def predict_student_risk(student: StudentData):
             f_idx = feature_order.index(f)
             feature_importance[f] = float(shap_values.values[0][f_idx])
 
-        # 6. AUTOMATED INTERVENTION LOGIC
+        
         interventions = []
         if is_at_risk == 1:
             interventions.append("High Risk Alert: Immediate faculty intervention required.")
