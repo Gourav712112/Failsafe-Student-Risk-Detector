@@ -11,14 +11,14 @@ print("--- Failsafe ML Pipeline Started ---")
 
 # 1. REAL DATASET LOADING
 try:
-    # ⚠️ यहाँ हमने sep=';' हटा दिया है क्योंकि आपका डेटा कॉमा (,) से सेपरेटेड है
+    
     df = pd.read_csv('student-mat.csv')
     print("1. Real dataset 'student-mat.csv' loaded successfully.")
 except FileNotFoundError:
     print("Error: 'student-mat.csv' file not found!")
     exit()
 
-# कॉलम के नामों को साफ कर रहे हैं ताकि कोट्स या स्पेस हट जाएं
+
 df.columns = df.columns.str.replace('"', '').str.strip()
 
 # 2. TARGET VARIABLE CREATION
@@ -26,7 +26,7 @@ if 'G3' in df.columns:
     df['At_Risk'] = (df['G3'] < 10).astype(int)
     df = df.drop(columns=['G3'])
 else:
-    print(f"Error: 'G3' कॉलम नहीं मिला। उपलब्ध कॉलम्स हैं: {list(df.columns)}")
+    print(f"Error: 'G3' Column not find: {list(df.columns)}")
     exit()
 
 # 3. AUTOMATIC CATEGORICAL ENCODING

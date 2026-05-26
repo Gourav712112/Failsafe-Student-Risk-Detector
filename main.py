@@ -16,7 +16,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# सेव की गई चीज़ों को लोड करना
 try:
     model = joblib.load('failsafe_xgb_model.pkl')
     encoders = joblib.load('label_encoders_dict.pkl')
@@ -27,12 +26,12 @@ except Exception as e:
     print(f"Error loading model files: {e}")
 
 class StudentData(BaseModel):
-    sex: str          # 'M' या 'F'
-    studytime: int    # 1 से 4
-    failures: int     # 0 से 3
-    absences: int     # 0 से 93
-    G1: int           # 0 से 20
-    G2: int           # 0 से 20
+    sex: str         
+    studytime: int    
+    failures: int    
+    absences: int     
+    G1: int          
+    G2: int          
 
 @app.get("/")
 def home():
@@ -41,10 +40,10 @@ def home():
 @app.post("/predict")
 def predict_student_risk(student: StudentData):
     try:
-        # 1. बेसलाइन रो की कॉपी बनाएं (ताकि सभी 32 फीचर्स मौजूद रहें)
+        # 1. 
         full_features = baseline_row.copy()
         
-        # 2. यूजर द्वारा फ्रंटएंड से भेजे गए मुख्य फीचर्स को अपडेट करें
+        # 2. 
         full_features['sex'] = student.sex
         full_features['studytime'] = student.studytime
         full_features['failures'] = student.failures
@@ -54,14 +53,13 @@ def predict_student_risk(student: StudentData):
 
         input_data = pd.DataFrame([full_features])
 
-        # 3. सभी कैटेगोरिकल फीचर्स को उनके संबंधित एनकोडर से कन्वर्ट करें
+        # 3.
         for col, le in encoders.items():
             if col in input_data.columns:
-                # अगर नया इनपुट स्ट्रिंग है, तो उसे एनकोड करें
+               \
                 if isinstance(input_data[col].iloc[0], str):
                     input_data[col] = le.transform(input_data[col])
 
-        # यह सुनिश्चित करने के लिए कि कॉलम्स का ऑर्डर बिल्कुल ट्रेनिंग जैसा ही हो
         feature_order = model.get_booster().feature_names
         input_data = input_data[feature_order]
 
@@ -71,7 +69,6 @@ def predict_student_risk(student: StudentData):
         
         is_at_risk = 1 if (risk_percentage >= 50.0 or student.failures > 0) else 0
 
-        # 5. SHAP Values - केवल उन्हीं 6 मुख्य फीचर्स का इम्पैक्ट दिखाएंगे जो यूजर को समझ आएं
         shap_values = explainer(input_data)
         user_visible_features = ['sex', 'studytime', 'failures', 'absences', 'G1', 'G2']
         
